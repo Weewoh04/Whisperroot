@@ -12,7 +12,7 @@ export default function DevlogPage() {
       />
       <div className="space-y-5">
         {devlogEntries.map((entry) => (
-          <DevlogCard key={entry.id} entry={entry} />
+          <DevlogCard key={entry.id} entry={entry} full />
         ))}
       </div>
     </section>
