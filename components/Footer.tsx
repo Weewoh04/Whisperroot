@@ -3,7 +3,7 @@ import { Sprout } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-creamcap/10 bg-moss-950/70">
+    <footer className="border-t border-creamcap/10 bg-[rgba(3,7,6,0.72)] backdrop-blur-xl">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.3fr_0.7fr] lg:px-8">
         <div>
           <div className="mb-4 flex items-center gap-3">
@@ -20,7 +20,8 @@ export default function Footer() {
             { label: "World Map", href: "/world-map" },
             { label: "Bestiary", href: "/creatures" },
             { label: "Origins", href: "/origins" },
-            { label: "Support", href: "/support" }
+            { label: "World Lore", href: "/lore" },
+            { label: "About", href: "/about" }
           ].map(({ label, href }) => {
             return (
               <Link

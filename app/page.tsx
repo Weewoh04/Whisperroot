@@ -1,87 +1,114 @@
-import Link from "next/link";
-import { ArrowRight, BookOpen, HeartHandshake, Map } from "lucide-react";
-import CreatureCard from "@/components/CreatureCard";
+import { BookOpen, Compass, Feather, Map, ScrollText, Sparkles } from "lucide-react";
+import AncientButton from "@/components/AncientButton";
 import DevlogCard from "@/components/DevlogCard";
 import EnvironmentCard from "@/components/EnvironmentCard";
+import GlowDivider from "@/components/GlowDivider";
 import PlaceholderImage from "@/components/PlaceholderImage";
+import RootCard from "@/components/RootCard";
 import SectionHeader from "@/components/SectionHeader";
-import SupportCTA from "@/components/SupportCTA";
-import { creatures } from "@/data/creatures";
+import { bestiaryCreatures } from "@/data/bestiaryData";
 import { devlogEntries } from "@/data/devlog";
 import { environments } from "@/data/environments";
 
+const pillars = [
+  {
+    title: "The World Remembers",
+    text: "Whisperroot is shaped by living roots, buried ruins, memory echoes, and ecosystems that react to what players restore.",
+    icon: Sparkles
+  },
+  {
+    title: "Choose Your Origin",
+    text: "Six playable origins begin with different emotions, abilities, opening paths, and relationships to the Worldroot.",
+    icon: Feather
+  },
+  {
+    title: "Creatures Are Not Just Enemies",
+    text: "Beasts can be companions, guardians, predators, traversal allies, warnings, or ancient beings the world grew around.",
+    icon: BookOpen
+  }
+];
+
 export default function HomePage() {
   const featuredEnvironments = environments.slice(0, 3);
-  const featuredCreatures = creatures.slice(0, 3);
-  const latestDevlogs = devlogEntries.slice(0, 2);
+  const featuredCreatures = bestiaryCreatures.slice(0, 3);
+  const latestDevlogs = devlogEntries.slice(-2).reverse();
 
   return (
-    <div>
-      <section className="relative overflow-hidden">
-        <div className="mx-auto grid min-h-[calc(100vh-96px)] max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-8">
+    <div className="overflow-hidden">
+      <section className="relative">
+        <div className="mx-auto grid min-h-[calc(100vh-96px)] max-w-7xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-8">
           <div>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-amberglow">
-              Open-World Cozy Fantasy
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-amberglow">
+              Enter The Living World
             </p>
-            <h1 className="max-w-4xl text-5xl font-semibold leading-tight text-creamcap sm:text-7xl">
+            <h1 className="font-serif text-6xl font-semibold leading-none text-creamcap glow-text sm:text-8xl lg:text-9xl">
               Whisperroot
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-creamcap/72">
-              Explore a moss-lit living world, befriend gentle creatures, uncover old root magic,
-              and help a strange forest remember how to heal.
+            <p className="mt-7 max-w-3xl text-xl leading-9 text-creamcap/78">
+              A living world of roots, ruins, creatures, and forgotten memory.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/world-map"
-                className="inline-flex min-h-12 items-center gap-2 rounded-full bg-amberglow px-5 text-sm font-semibold text-moss-950 transition hover:bg-creamcap"
-              >
-                <Map className="size-4" aria-hidden="true" />
-                Explore Map
-              </Link>
-              <Link
-                href="/creatures"
-                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-creamcap/14 bg-moss-900/70 px-5 text-sm font-semibold text-creamcap transition hover:border-violetcap/60 hover:text-violetcap"
-              >
-                <BookOpen className="size-4" aria-hidden="true" />
-                Open Bestiary
-              </Link>
-              <Link
-                href="/support"
-                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-creamcap/14 px-5 text-sm font-semibold text-creamcap/80 transition hover:border-amberglow/50 hover:text-amberglow"
-              >
-                <HeartHandshake className="size-4" aria-hidden="true" />
-                Support
-              </Link>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-creamcap/62">
+              Wonder comes first here. Danger waits underneath, tangled in old rootways, haunted
+              swamps, crystal memories, and creatures that belong to the world before they belong to
+              the player.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <AncientButton href="/environments" icon={Map}>
+                Enter the World
+              </AncientButton>
+              <AncientButton href="/origins" icon={Compass} variant="ghost">
+                Choose Your Origin
+              </AncientButton>
+              <AncientButton href="/creatures" icon={BookOpen} variant="ghost">
+                Explore the Bestiary
+              </AncientButton>
             </div>
           </div>
-          <PlaceholderImage
-            label="World Key Art"
-            description="Replace this with cozy key art of Whisperroot's glowing forest, marsh, caverns, and canopy."
-            className="min-h-[420px] rounded-[2rem]"
-          />
+          <div className="relative">
+            <div className="absolute -inset-8 rounded-full bg-amberglow/10 blur-3xl pulse-root" />
+            <PlaceholderImage
+              label="The Worldroot Stirs"
+              description="Future cinematic key art: glowing roots beneath forests, caverns, swamps, and sky ruins."
+              className="relative min-h-[460px] rounded-[2rem]"
+            />
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <GlowDivider />
+
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Game Pitch"
-          title="A gentle wilderness that remembers what you do."
-          description="Whisperroot blends cozy collection, creature trust, light crafting, and secrets tucked into a fantasy ecosystem. The world hub keeps the design bible visible as regions, origins, and creature relationships grow."
+          eyebrow="The World Remembers"
+          title="A site that behaves like a living archive."
+          description="The Whisperroot hub gathers origins, environments, creature ecosystems, lore fragments, and real development notes as the world slowly wakes up."
         />
-        <div className="grid gap-4 md:grid-cols-3">
-          {["Befriend creatures through care", "Unlock routes with gentle magic", "Restore places without conquering them"].map(
-            (pitch) => (
-              <div key={pitch} className="rounded-2xl border border-creamcap/10 bg-moss-900/72 p-5">
-                <div className="mb-4 h-1 w-20 rounded-full bg-amberglow/70" />
-                <h2 className="text-lg font-semibold text-creamcap">{pitch}</h2>
+        <div className="grid gap-5 md:grid-cols-3">
+          {pillars.map(({ title, text, icon: Icon }) => (
+            <RootCard key={title} className="p-6">
+              <div className="relative">
+                <Icon className="mb-5 size-7 text-amberglow" aria-hidden="true" />
+                <h2 className="font-serif text-2xl text-creamcap">{title}</h2>
+                <p className="mt-3 text-sm leading-6 text-creamcap/66">{text}</p>
               </div>
-            )
-          )}
+            </RootCard>
+          ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <SectionHeader eyebrow="Regions" title="Featured Environments" />
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+          <SectionHeader
+            eyebrow="Explore Living Environments"
+            title="Every biome is a portal."
+            description="Regions are built around mood, movement, creatures, landmarks, and the memory of what happened before the Whisper woke."
+          />
+          <div className="flex lg:justify-end">
+            <AncientButton href="/environments" icon={Map} variant="ghost">
+              Explore Environments
+            </AncientButton>
+          </div>
+        </div>
         <div className="grid gap-5 md:grid-cols-3">
           {featuredEnvironments.map((environment) => (
             <EnvironmentCard key={environment.id} environment={environment} />
@@ -89,32 +116,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <SectionHeader eyebrow="Bestiary" title="Featured Creatures" />
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <SectionHeader
+          eyebrow="Living Bestiary"
+          title="Creature ecosystems, not encounter lists."
+          description="The archive tracks ambient life, passive wildlife, territorial threats, traversal allies, corrupted wounds, and ancient beings."
+        />
         <div className="grid gap-5 md:grid-cols-3">
           {featuredCreatures.map((creature) => (
-            <CreatureCard key={creature.id} creature={creature} />
+            <RootCard key={creature.id} className="p-5">
+              <div className="relative">
+                <p className="mb-3 text-xs uppercase tracking-[0.2em] text-amberglow/78">
+                  {creature.environment}
+                </p>
+                <h2 className="font-serif text-2xl text-creamcap">{creature.name}</h2>
+                <p className="mt-3 text-sm leading-6 text-creamcap/66">{creature.description}</p>
+                <div className="mt-4 flex flex-wrap gap-2 text-xs text-creamcap/68">
+                  <span className="rounded-full border border-creamcap/10 px-3 py-1">{creature.category}</span>
+                  <span className="rounded-full border border-creamcap/10 px-3 py-1">{creature.temperament}</span>
+                </div>
+              </div>
+            </RootCard>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <SectionHeader eyebrow="Devlog" title="Latest Notes" />
-          <Link href="/devlog" className="inline-flex items-center gap-2 text-sm font-semibold text-amberglow">
-            Read devlog
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <SectionHeader
+            eyebrow="Development Journal"
+            title="Expedition notes from the world waking up."
+            description="Real devlogs track the project as systems, biomes, creature philosophies, and the website itself take shape."
+          />
+          <AncientButton href="/devlog" icon={ScrollText} variant="ghost">
+            Read Devlogs
+          </AncientButton>
         </div>
         <div className="grid gap-5 md:grid-cols-2">
           {latestDevlogs.map((entry) => (
             <DevlogCard key={entry.id} entry={entry} />
           ))}
         </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <SupportCTA />
       </section>
     </div>
   );

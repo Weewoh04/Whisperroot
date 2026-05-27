@@ -4,6 +4,7 @@ export type DevlogEntry = {
   date: string;
   category: string;
   excerpt: string;
+  progressTags: string[];
   body: Array<{
     type: "paragraph" | "list";
     content?: string;
@@ -17,6 +18,7 @@ export const devlogEntries: DevlogEntry[] = [
     title: "Whisperroot Devlog #001: The Worldroot Awakens",
     date: "2026-05-18",
     category: "Worldbuilding",
+    progressTags: ["Worldroot", "Regions", "Scope"],
     excerpt:
       "The first real day Whisperroot started feeling less like an idea and more like an actual world.",
     body: [
@@ -82,6 +84,7 @@ export const devlogEntries: DevlogEntry[] = [
     title: "Whisperroot Devlog #002: Choosing Your Origin",
     date: "2026-05-20",
     category: "Origins",
+    progressTags: ["Origins", "Traversal", "Great Whisper"],
     excerpt:
       "Today was focused entirely on the player origins and how differently each one experiences the world.",
     body: [
@@ -169,6 +172,7 @@ export const devlogEntries: DevlogEntry[] = [
     title: "Whisperroot Devlog #003: The Whispering Swamps",
     date: "2026-05-23",
     category: "Biome Design",
+    progressTags: ["Swamps", "Creatures", "Fog"],
     excerpt:
       "The Whispering Swamps became more than a poison area: a psychologically dangerous region that feels like it remembers things.",
     body: [
@@ -262,6 +266,7 @@ export const devlogEntries: DevlogEntry[] = [
     title: "Whisperroot Devlog #004: Building the World Outside the Game",
     date: "2026-05-26",
     category: "Development Hub",
+    progressTags: ["Website", "Community", "Workflow"],
     excerpt:
       "Today shifted from pure worldbuilding into creating a home for Whisperroot outside the game itself.",
     body: [

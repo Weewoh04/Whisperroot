@@ -12,7 +12,7 @@ export default function SectionHeader({ eyebrow, title, description }: SectionHe
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="text-3xl font-semibold text-creamcap sm:text-5xl">{title}</h1>
+      <h1 className="font-serif text-3xl font-semibold text-creamcap glow-text sm:text-5xl">{title}</h1>
       {description ? <p className="mt-4 text-base leading-7 text-creamcap/68">{description}</p> : null}
     </div>
   );
