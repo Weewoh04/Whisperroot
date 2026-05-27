@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Eye, ImageIcon, Search, Sparkles, Trees, X } from "lucide-react";
+import { Eye, ImageIcon, Search, Sparkles, Trash2, Upload, X } from "lucide-react";
 import {
   bestiaryCategories,
   bestiaryEnvironments,
@@ -16,6 +16,9 @@ import {
 type CategoryFilter = "All" | BestiaryCategory;
 type EnvironmentFilter = "All Environments" | BestiaryEnvironment;
 type DiscoveryFilter = "All" | "Discovered" | "Undiscovered";
+type UploadedImages = Record<string, string>;
+
+const uploadedImagesStorageKey = "whisperroot-bestiary-uploaded-images";
 
 const particles = Array.from({ length: 38 }, (_, index) => ({
   id: index,
@@ -33,11 +36,56 @@ export default function BestiaryExperience({ creatures }: { creatures: BestiaryC
   const [search, setSearch] = useState("");
   const [sortAlpha, setSortAlpha] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(creatures[0]?.id ?? null);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImages>({});
   const [selectedEnvironment, setSelectedEnvironment] = useState<BestiaryEnvironment>(
     creatures[0]?.environment ?? "Rootkin Forest Village"
   );
 
   const accent = environmentAccents[selectedEnvironment];
+
+  useEffect(() => {
+    const storedImages = window.localStorage.getItem(uploadedImagesStorageKey);
+
+    if (!storedImages) {
+      return;
+    }
+
+    try {
+      setUploadedImages(JSON.parse(storedImages) as UploadedImages);
+    } catch {
+      window.localStorage.removeItem(uploadedImagesStorageKey);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(uploadedImagesStorageKey, JSON.stringify(uploadedImages));
+  }, [uploadedImages]);
+
+  function handleImageUpload(creature: BestiaryCreature, file: File) {
+    if (!file.type.startsWith("image/")) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result !== "string") {
+        return;
+      }
+
+      setUploadedImages((current) => ({ ...current, [creature.id]: reader.result as string }));
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  function handleImageRemove(creature: BestiaryCreature) {
+    setUploadedImages((current) => {
+      const next = { ...current };
+      delete next[creature.id];
+      return next;
+    });
+  }
 
   const filteredCreatures = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -126,7 +174,10 @@ export default function BestiaryExperience({ creatures }: { creatures: BestiaryC
         <CreatureGrid
           creatures={filteredCreatures}
           expandedId={expandedId}
+          uploadedImages={uploadedImages}
           onHoverEnvironment={setSelectedEnvironment}
+          onImageUpload={handleImageUpload}
+          onImageRemove={handleImageRemove}
           onToggle={(creature) => {
             setSelectedEnvironment(creature.environment);
             setExpandedId((current) => (current === creature.id ? null : creature.id));
@@ -324,12 +375,18 @@ function SelectField({
 function CreatureGrid({
   creatures,
   expandedId,
+  uploadedImages,
   onHoverEnvironment,
+  onImageUpload,
+  onImageRemove,
   onToggle
 }: {
   creatures: BestiaryCreature[];
   expandedId: string | null;
+  uploadedImages: UploadedImages;
   onHoverEnvironment: (environment: BestiaryEnvironment) => void;
+  onImageUpload: (creature: BestiaryCreature, file: File) => void;
+  onImageRemove: (creature: BestiaryCreature) => void;
   onToggle: (creature: BestiaryCreature) => void;
 }) {
   if (creatures.length === 0) {
@@ -348,7 +405,10 @@ function CreatureGrid({
           creature={creature}
           index={index}
           expanded={expandedId === creature.id}
+          uploadedImage={uploadedImages[creature.id]}
           onHover={() => onHoverEnvironment(creature.environment)}
+          onImageUpload={(file) => onImageUpload(creature, file)}
+          onImageRemove={() => onImageRemove(creature)}
           onToggle={() => onToggle(creature)}
         />
       ))}
@@ -360,13 +420,19 @@ function CreatureArchiveCard({
   creature,
   index,
   expanded,
+  uploadedImage,
   onHover,
+  onImageUpload,
+  onImageRemove,
   onToggle
 }: {
   creature: BestiaryCreature;
   index: number;
   expanded: boolean;
+  uploadedImage?: string;
   onHover: () => void;
+  onImageUpload: (file: File) => void;
+  onImageRemove: () => void;
   onToggle: () => void;
 }) {
   const accent = environmentAccents[creature.environment];
@@ -386,7 +452,13 @@ function CreatureArchiveCard({
       }}
     >
       <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 180, damping: 18 }}>
-        <CreatureImage creature={creature} accent={accent} />
+        <CreatureImage
+          creature={creature}
+          accent={accent}
+          uploadedImage={uploadedImage}
+          onImageUpload={onImageUpload}
+          onImageRemove={onImageRemove}
+        />
         <div className="space-y-5 p-5">
           <div className="flex flex-wrap gap-2">
             <DiscoveryBadge discovered={creature.discovered} accent={accent.secondary} />
@@ -429,9 +501,14 @@ function CreatureArchiveCard({
               >
                 <div className="space-y-4 border-t border-creamcap/10 pt-5">
                   <JournalStat label="Behavior Notes" value={creature.behavior} />
-                  <JournalStat label="Image Path" value={creature.image} />
+                  <JournalStat
+                    label={uploadedImage ? "Uploaded Image" : "Image Path"}
+                    value={uploadedImage ? "Browser upload saved for this device" : creature.image}
+                  />
                   <p className="text-xs leading-5 text-creamcap/45">
-                    Replace the art by adding an image at this path under /public/images/bestiary.
+                    Uploads preview directly on this card and persist in this browser. For a permanent
+                    site image, add the file under /public/images/bestiary and update the image path in
+                    data/bestiaryData.ts.
                   </p>
                 </div>
               </motion.div>
@@ -445,14 +522,26 @@ function CreatureArchiveCard({
 
 function CreatureImage({
   creature,
-  accent
+  accent,
+  uploadedImage,
+  onImageUpload,
+  onImageRemove
 }: {
   creature: BestiaryCreature;
   accent: { primary: string; secondary: string; glow: string; mist: string };
+  uploadedImage?: string;
+  onImageUpload: (file: File) => void;
+  onImageRemove: () => void;
 }) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const showImage = creature.image && !failed;
+  const imageSource = uploadedImage || creature.image;
+  const showImage = imageSource && !failed;
+
+  useEffect(() => {
+    setLoaded(false);
+    setFailed(false);
+  }, [imageSource]);
 
   return (
     <div
@@ -468,7 +557,7 @@ function CreatureImage({
       {showImage ? (
         // Future art replacement: update creature.image in data/bestiaryData.ts.
         <img
-          src={creature.image}
+          src={imageSource}
           alt={creature.name}
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
@@ -487,6 +576,36 @@ function CreatureImage({
         </div>
       ) : null}
       <div className="absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-creamcap/50 to-transparent" />
+      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
+        <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-creamcap/15 bg-[#030706]/72 px-4 text-xs font-bold uppercase tracking-[0.12em] text-creamcap/82 backdrop-blur transition hover:border-current hover:text-creamcap">
+          <Upload className="size-4" aria-hidden="true" />
+          {uploadedImage ? "Replace Image" : "Upload Image"}
+          <input
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+
+              if (file) {
+                onImageUpload(file);
+              }
+
+              event.currentTarget.value = "";
+            }}
+          />
+        </label>
+        {uploadedImage ? (
+          <button
+            type="button"
+            onClick={onImageRemove}
+            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-creamcap/15 bg-[#030706]/72 px-4 text-xs font-bold uppercase tracking-[0.12em] text-creamcap/74 backdrop-blur transition hover:border-red-300/50 hover:text-red-200"
+          >
+            <Trash2 className="size-4" aria-hidden="true" />
+            Remove
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
