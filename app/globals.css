@@ -54,3 +54,54 @@ body::before {
     radial-gradient(circle at 74% 70%, rgba(157, 123, 216, 0.25), transparent 8rem),
     linear-gradient(135deg, rgba(77, 139, 90, 0.44), rgba(13, 59, 62, 0.88));
 }
+
+.origins-hero-art {
+  background:
+    linear-gradient(to bottom, transparent 0%, rgba(3, 7, 6, 0.28) 44%, rgba(3, 7, 6, 0.95) 100%),
+    radial-gradient(circle at 50% 18%, rgba(239, 228, 198, 0.18), transparent 15rem),
+    radial-gradient(circle at 18% 72%, rgba(244, 184, 95, 0.22), transparent 20rem),
+    radial-gradient(circle at 82% 68%, rgba(97, 213, 209, 0.15), transparent 22rem),
+    linear-gradient(125deg, rgba(8, 26, 20, 0.92), rgba(5, 8, 12, 0.88)),
+    repeating-linear-gradient(115deg, rgba(239, 228, 198, 0.05) 0 1px, transparent 1px 18px);
+}
+
+.origins-hero-art::before {
+  position: absolute;
+  inset: -12%;
+  content: "";
+  background:
+    radial-gradient(ellipse at 38% 60%, rgba(244, 184, 95, 0.14), transparent 34%),
+    linear-gradient(100deg, transparent 16%, rgba(244, 184, 95, 0.28) 17%, transparent 18% 34%, rgba(111, 170, 95, 0.24) 35%, transparent 36%),
+    linear-gradient(78deg, transparent 42%, rgba(244, 184, 95, 0.22) 43%, transparent 44%);
+  filter: blur(1px);
+  animation: origins-breathe 9s ease-in-out infinite;
+}
+
+.origins-hero-art::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(to right, rgba(3, 7, 6, 0.78), transparent 28%, transparent 70%, rgba(3, 7, 6, 0.72)),
+    radial-gradient(ellipse at 50% 88%, rgba(239, 228, 198, 0.18), transparent 40%);
+}
+
+.origins-card-texture {
+  background:
+    linear-gradient(to top, rgba(3, 7, 6, 0.9), transparent 50%),
+    repeating-linear-gradient(28deg, rgba(239, 228, 198, 0.08) 0 1px, transparent 1px 15px),
+    radial-gradient(circle at 70% 28%, rgba(255, 255, 255, 0.18), transparent 8rem);
+}
+
+@keyframes origins-breathe {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.78;
+  }
+
+  50% {
+    transform: translate3d(1.5%, -1%, 0) scale(1.04);
+    opacity: 1;
+  }
+}
