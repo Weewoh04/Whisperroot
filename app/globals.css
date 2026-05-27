@@ -93,6 +93,57 @@ body::before {
     radial-gradient(circle at 70% 28%, rgba(255, 255, 255, 0.18), transparent 8rem);
 }
 
+.environments-hero-map {
+  background:
+    linear-gradient(to bottom, transparent 0%, rgba(3, 7, 6, 0.25) 46%, rgba(3, 7, 6, 0.95) 100%),
+    radial-gradient(circle at 50% 24%, rgba(239, 228, 198, 0.13), transparent 18rem),
+    radial-gradient(circle at 18% 72%, rgba(41, 213, 199, 0.2), transparent 24rem),
+    radial-gradient(circle at 84% 62%, rgba(245, 193, 95, 0.16), transparent 24rem),
+    linear-gradient(128deg, rgba(5, 14, 12, 0.94), rgba(5, 8, 12, 0.9)),
+    repeating-linear-gradient(110deg, rgba(239, 228, 198, 0.045) 0 1px, transparent 1px 20px);
+}
+
+.environments-hero-map::before {
+  position: absolute;
+  inset: -14%;
+  content: "";
+  background:
+    radial-gradient(ellipse at 46% 68%, rgba(245, 193, 95, 0.12), transparent 34%),
+    linear-gradient(102deg, transparent 12%, rgba(245, 193, 95, 0.27) 13%, transparent 14% 29%, rgba(41, 213, 199, 0.2) 30%, transparent 31%),
+    linear-gradient(68deg, transparent 38%, rgba(245, 193, 95, 0.22) 39%, transparent 40% 62%, rgba(41, 213, 199, 0.18) 63%, transparent 64%);
+  filter: blur(1px);
+  animation: environments-pulse 10s ease-in-out infinite;
+}
+
+.environments-hero-map::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    radial-gradient(ellipse at 50% 92%, rgba(239, 228, 198, 0.14), transparent 42%),
+    linear-gradient(to right, rgba(3, 7, 6, 0.78), transparent 30%, transparent 68%, rgba(3, 7, 6, 0.72));
+}
+
+.environments-card-texture {
+  background:
+    linear-gradient(to top, rgba(3, 7, 6, 0.92), transparent 52%),
+    repeating-linear-gradient(32deg, rgba(239, 228, 198, 0.08) 0 1px, transparent 1px 17px),
+    radial-gradient(circle at 74% 24%, rgba(255, 255, 255, 0.17), transparent 9rem);
+}
+
+@keyframes environments-pulse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.72;
+  }
+
+  50% {
+    transform: translate3d(-1.4%, -1%, 0) scale(1.05);
+    opacity: 1;
+  }
+}
+
 @keyframes origins-breathe {
   0%,
   100% {
